@@ -9,9 +9,10 @@ import chess.pieces.Rook;
 public class ChessMatch {
 
 	private Board board;
+	private static final int BOARD_SIZE = 8;
 
 	public ChessMatch() {
-		board = new Board(8, 8);
+		board = new Board(BOARD_SIZE, BOARD_SIZE);
 		initialSetup();
 	}
 
@@ -34,6 +35,8 @@ public class ChessMatch {
 	private void validateSourcePosition(Position position) {
 		if(!board.thereIsAPiece(position))
 			throw new ChessException("There is no piece at source position.");
+		if(!board.piece(position).isThereAnyPossibleMove())
+			throw new ChessException("This piece can't move.");
 	}
 	
 	private Piece makeMove(Position source, Position target) {
