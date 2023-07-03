@@ -3,6 +3,7 @@ package application;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import chess.ChessMatch;
 import chess.ChessPiece;
 import chess.ChessPosition;
 import chess.Color;
@@ -30,11 +31,19 @@ public class UI {
 	public static final String ANSI_CYAN_BACKGROUND = "\u001B[46m";
 	public static final String ANSI_WHITE_BACKGROUND = "\u001B[47m";
 
+	/**
+	 * Clear the console screen.
+	 */
 	public static void clearScreen() {
 		System.out.print("\033[H\033[2J");
 		System.out.flush();
 	}
 
+	/**
+	 * Reads the chess position string from a {@code Scanner} and returns the equivalent {@code ChessPosition} object
+	 * @param sc A {@code Scanner}
+	 * @return The equivalent {@code ChessPosition} object
+	 */
 	public static ChessPosition readChessPosition(Scanner sc) {
 		try {
 			String s = sc.next();
@@ -46,6 +55,10 @@ public class UI {
 		}
 	}
 
+	/**
+	 * Print the board to the standard output.
+	 * @param pieces A piece matrix representing a chess board piece distribution
+	 */
 	public static void printBoard(ChessPiece[][] pieces) {
 		System.out.print(ANSI_BLACK_BACKGROUND);
 		System.out.print(ANSI_CYAN);
@@ -59,6 +72,22 @@ public class UI {
 		System.out.print(ANSI_RESET);
 	}
 	
+	/**
+	 * Print the given {@code ChessMatch} full info to the standard output.
+	 * @param chessMatch A {@code ChessMatch} object
+	 */
+	public static void printMatch(ChessMatch chessMatch) {
+		printBoard(chessMatch.getPieces());
+		System.out.println();
+		System.out.println("TURN: " + chessMatch.getTurn());
+		System.out.println("WAITING PLAYER: " + chessMatch.getCurrentPlayer());
+	}
+	
+	/**
+	 * Print the board to the standard output, highlighting possible move tiles.
+	 * @param pieces A piece matrix representing a chess board piece distribution
+	 * @param possibleMoves A boolean matrix representing a chess board possible moves distribution
+	 */
 	public static void printBoard(ChessPiece[][] pieces, boolean[][] possibleMoves) {
 		System.out.print(ANSI_BLACK_BACKGROUND);
 		System.out.print(ANSI_CYAN);
@@ -72,6 +101,12 @@ public class UI {
 		System.out.print(ANSI_RESET);
 	}
 
+	/**
+	 * Print the given {@code ChessPiece} to the standard output. If the chess piece is null, then it
+	 * will print a dash '-'
+	 * @param piece A {@code ChessPiece} object
+	 * @param background If {@code true}, the piece background will be highlighted
+	 */
 	private static void printPiece(ChessPiece piece, boolean background) {
 		if (background)
 			System.out.print(ANSI_RED_BACKGROUND);

@@ -10,10 +10,22 @@ public class ChessMatch {
 
 	private Board board;
 	private static final int BOARD_SIZE = 8;
+	private int turn;
+	private Color currentPlayer;
 
 	public ChessMatch() {
 		board = new Board(BOARD_SIZE, BOARD_SIZE);
+		turn = 1;
+		currentPlayer = Color.WHITE;
 		initialSetup();
+	}
+
+	public int getTurn() {
+		return turn;
+	}
+
+	public Color getCurrentPlayer() {
+		return currentPlayer;
 	}
 
 	public ChessPiece[][] getPieces() {
@@ -29,29 +41,43 @@ public class ChessMatch {
 		validateSourcePosition(p);
 		return board.piece(p).possibleMoves();
 	}
-	
-	
+
+	/**
+	 * Perform a chess move using the piece at {@code sourcePos} going to {@code targetPos} if possible
+	 * @param sourcePos piece start position
+	 * @param targetPos move destiny position
+	 * @return The captured {@code ChessPiece} at {@code targetPos} or a {@code null} object if the
+	 *  position is empty
+	 */
 	public ChessPiece performChessMove(ChessPosition sourcePos, ChessPosition targetPos) {
 		Position source = sourcePos.toPosition();
 		Position target = targetPos.toPosition();
 		validateSourcePosition(source);
 		validateTargetPosition(source, target);
 		Piece capturedPiece = makeMove(source, target);
+		nextTurn();
 		return (ChessPiece) capturedPiece;
 	}
-	
+
 	private void validateSourcePosition(Position position) {
-		if(!board.thereIsAPiece(position))
+		if (!board.thereIsAPiece(position))
 			throw new ChessException("There is no piece at source position.");
-		if(!board.piece(position).isThereAnyPossibleMove())
+		if(getCurrentPlayer() != ((ChessPiece) board.piece(position)).getColor())
+			throw new ChessException("This piece does not belong to you");
+		if (!board.piece(position).isThereAnyPossibleMove())
 			throw new ChessException("This piece can't move.");
 	}
-	
+
 	private void validateTargetPosition(Position source, Position target) {
-		if(!board.piece(source).possibleMove(target))
+		if (!board.piece(source).possibleMove(target))
 			throw new ChessException("The chosen piece can't move to target position");
 	}
 	
+	private void nextTurn() {
+		turn++;
+		currentPlayer = (currentPlayer == Color.WHITE) ? Color.BLACK : Color.WHITE;
+	}
+
 	private Piece makeMove(Position source, Position target) {
 		Piece p = board.removePiece(source);
 		Piece capturedPiece = board.removePiece(target);
