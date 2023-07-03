@@ -16,6 +16,11 @@ public abstract class Piece {
 	
 	public abstract boolean[][] possibleMoves();
 	
+	/**
+	 * Checks if the piece movement to the specified target {@code Position} is possible.
+	 * @param position target position
+	 * @return {@code boolean}
+	 */
 	public boolean possibleMove(Position position) {
 		return possibleMoves()[position.getRow()][position.getColumn()]; //Hook method implementation
 	}

@@ -23,6 +23,13 @@ public class Board {
 		return columns;
 	}
 	
+	/**
+	 * Get the board piece at the (row, column) pair or a null object.
+	 * 
+	 * @param row board row
+	 * @param column board column
+	 * @return A {@code Piece} object or a {@code null} value object if no piece is found.
+	 */
 	public Piece piece(int row, int column) {
 		if (!positionExists(row, column))
 			throw new BoardException("Position out of bounds.");
@@ -30,6 +37,12 @@ public class Board {
 		return pieces[row][column];
 	}
 	
+	/**
+	 * Get the board piece at the specified {@code Position} or a null object.
+	 * 
+	 * @param position {@code Position} object representing a board cell.
+	 * @return {@code Piece} object or a {@code null} value object if no piece is found.
+	 */
 	public Piece piece(Position position) {
 		if (!positionExists(position))
 			throw new BoardException("Position out of bounds.");
